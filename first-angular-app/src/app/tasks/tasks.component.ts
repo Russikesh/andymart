@@ -1,46 +1,41 @@
 import { Component, Input } from '@angular/core';
 import { TaskComponent } from './task/task.component';
+import { NewTaskComponent } from './new-task/new-task.component';
+import { type NewTaskData } from './task/task.model';
+import { TaskServices } from './tasks.services';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [TaskComponent],
+  imports: [TaskComponent, NewTaskComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
   @Input({ required: true }) userId!: string;
   @Input({ required: true }) name!: string;
+  isAddingTask = false;
+  // private tasksService: TaskServices;
 
-  tasks = [
-    {
-      id: 't1',
-      userId: 'u1',
-      title: 'Master Angular',
-      summary: 'Learn all the basoc and advanced features of Angular.',
-      dueDate: '2025-12-31',
-    },
-    {
-      id: 't2',
-      userId: 'u2',
-      title: 'Building first prototype',
-      summary: 'Building first prototype using features of Angular.',
-      dueDate: '2025-02-31',
-    },
-    {
-      id: 't3',
-      userId: 'u3',
-      title: 'Prepare Deployment',
-      summary: 'Prepare Deployment using CI/CD',
-      dueDate: '2025-10-01',
-    },
-  ];
-
-  get selectedUserTasks() {
-    return this.tasks.filter((task) => task.userId === this.userId);
+  constructor(private tasksService: TaskServices) {
+    // this.tasksService = tasksService;
   }
 
-  onCompleteTask(id: string) {
-   this.tasks = this.tasks.filter((task) => task.id !== id);
+  get selectedUserTasks() {
+    return this.tasksService.getUserTasks(this.userId);
+  }
+
+  onCompleteTask(id: string) {}
+
+  onStartAddTask() {
+    this.isAddingTask = true;
+  }
+
+  onCancelAddTask() {
+    this.isAddingTask = false;
+  }
+
+  onAddTask(taskData: NewTaskData) {
+    this.isAddingTask = false;
   }
 }
