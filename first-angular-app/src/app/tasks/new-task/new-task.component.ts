@@ -19,8 +19,8 @@ import { TaskServices } from '../tasks.services';
 })
 export class NewTaskComponent {
   @Input({ required: true }) userId!: string;
-  @Output() cancel = new EventEmitter<void>();
-  @Output() add = new EventEmitter<NewTaskData>();
+  @Output() close = new EventEmitter<void>();
+  // @Output() add = new EventEmitter<NewTaskData>();
   // enteredTitle = signal('');
   // enteredSummary = signal('');
   // enteredDate = signal('');
@@ -30,7 +30,7 @@ export class NewTaskComponent {
   private taskService = inject(TaskServices);
 
   onCancel() {
-    this.cancel.emit();
+    this.close.emit();
   }
 
   onSubmit() {
@@ -42,5 +42,6 @@ export class NewTaskComponent {
       },
       this.userId
     );
+    this.close.emit();
   }
 }
